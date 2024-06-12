@@ -1,13 +1,11 @@
 from models.__init__ import CURSOR, CONN
 
 class Freelancer:
-    def __init__(self, freelancer_id, username, email, password, name, surname):
+    def __init__(self, freelancer_id, username, email, name):
         self.freelancer_id = freelancer_id
         self.username = username
         self.email = email
-        self.password = password
         self.name = name
-        self.surname = surname
         self.projects = []
         self.ratings = []
         self.earnings = 0
@@ -23,11 +21,11 @@ class Freelancer:
     def save_to_database(self):
         """Save the freelancer to the database."""
         sql = """
-        INSERT INTO freelancers (freelancer_id, username, email, password, name, surname, 
+        INSERT INTO freelancers (freelancer_id, username, email, name, 
         is_active, is_admin, is_blocked, is_deleted, created_at, updated_at) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """
-        CURSOR.execute(sql, (self.freelancer_id, self.username, self.email, self.password, self.name, self.surname, 
+        CURSOR.execute(sql, (self.freelancer_id, self.username, self.email, self.name, 
                              self.is_active, self.is_admin, self.is_blocked, self.is_deleted, self.created_at, self.updated_at))
         CONN.commit()
 
@@ -71,26 +69,22 @@ class Freelancer:
         return None
 
     @classmethod
-    def create_freelancer(cls, freelancer_id, username, email, password, name, surname):
+    def create_freelancer(cls, freelancer_id, username, email, name):
         """Create a new freelancer."""
         if cls.find_freelancer_by_id(freelancer_id):
             raise ValueError("Freelancer with this ID already exists.")
-        freelancer = cls(freelancer_id, username, email, password, name, surname)
+        freelancer = cls(freelancer_id, username, email, name)
         freelancer.save_to_database()
         return freelancer
 
-    def update_freelancer(self, name=None, email=None, password=None, is_active=None, is_blocked=None):
+    def update_freelancer(self, username=None, email=None, name=None):
         """Update freelancer's information."""
-        if name:
-            self.name = name
+        if username:
+            self.username = username
         if email:
             self.email = email
-        if password:
-            self.password = password
-        if is_active is not None:
-            self.is_active = is_active
-        if is_blocked is not None:
-            self.is_blocked = is_blocked
+        if name:
+            self.name = name
         self.save_to_database()
 
     def delete_freelancer(self):
@@ -106,6 +100,7 @@ class Freelancer:
             if client:
                 clients.append(client)
         return clients
+
 
 
         
