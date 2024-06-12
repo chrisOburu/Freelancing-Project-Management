@@ -14,9 +14,7 @@ class Project:
         self._freelancer = freelancer
         Project.all.append(self)
 
-    @property
-    def client(self):
-        return self._client
+    
 
     @property
     def freelancer(self):
@@ -27,6 +25,10 @@ class Project:
         if not isinstance(value, Freelancer):
             raise ValueError("freelancer must be an instance of freelancer")
         self._freelancer = value
+
+    @property
+    def client(self):
+        return self._client
 
     @client.setter
     def client(self, value):
