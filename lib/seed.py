@@ -10,17 +10,20 @@ def seed_database():
     Client.drop_table()
     Client.create_table()
     Freelancer.create_table()
+    Project.drop_table()
+    Project.create_table()
 
     # Create seed data
-    payroll = client.create("Payroll", "Building A, 5th Floor")
-    human_resources = client.create(
-        "Human Resources", "Building C, East Wing")
-    Employee.create("Amir", "Accountant", payroll.id)
-    Employee.create("Bola", "Manager", payroll.id)
-    Employee.create("Charlie", "Manager", human_resources.id)
-    Employee.create("Dani", "Benefits Coordinator", human_resources.id)
-    Employee.create("Hao", "New Hires Coordinator", human_resources.id)
+    cl1=Client.create("JJGJG","UJGM958")
+    cl2=Client.create("OBOB","YRFJF98")
+    fr1=Freelancer.create("ggjjj","tghyhhhnhn")
+    fr2=Freelancer.create("OBOttyyuuB","yyynjuj667")
 
+    Project.create("HGJFKF",fr2.freelancer_id,cl1.client_id)
+    Project.create("wjcdcknjc",fr1.freelancer_id,cl2.client_id)
+
+
+    
 
 seed_database()
 print("Seeded database")

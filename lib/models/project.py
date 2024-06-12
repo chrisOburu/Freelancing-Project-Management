@@ -1,12 +1,9 @@
-<<<<<<< HEAD
 # from models.__init__ import CURSOR, CONN
 # from freelancer import Freelancer
 # from client import Client
-=======
-from __init__ import CURSOR, CONN
-from freelancer import Freelancer
-from client import Client
->>>>>>> refs/remotes/origin/main
+# from __init__ import CURSOR, CONN
+# from freelancer import Freelancer
+# from client import Client
 
 # class Project:
 #     all = []
@@ -46,6 +43,7 @@ from client import Client
 # lib/models/project.py
 from models.__init__ import CURSOR, CONN
 from models.client import Client
+from models.freelancer import Freelancer
 
 
 class Project:
@@ -53,16 +51,16 @@ class Project:
     # Dictionary of objects saved to the database.
     all = {}
 
-    def __init__(self, name, job_title, client_id, id=None):
+    def __init__(self, name, client_id,freelancer_id, id=None):
         self.id = id
         self.name = name
-        self.job_title = job_title
         self.client_id = client_id
+        self.freelancer_id = freelancer_id
 
     def __repr__(self):
         return (
-            f"<Project {self.id}: {self.name}, {self.job_title}, " +
-            f"Client ID: {self.client_id}>"
+            f"<Project {self.id}: {self.name}, {self.freelancer_id}, " +
+            f"Client ID: {self.client_id}>"+ f"Freelancer ID: {self.freelancer_id}>"
         )
 
     @property
@@ -78,18 +76,6 @@ class Project:
                 "Name must be a non-empty string"
             )
 
-    @property
-    def job_title(self):
-        return self._job_title
-
-    @job_title.setter
-    def job_title(self, job_title):
-        if isinstance(job_title, str) and len(job_title):
-            self._job_title = job_title
-        else:
-            raise ValueError(
-                "job_title must be a non-empty string"
-            )
 
     @property
     def client_id(self):
@@ -97,8 +83,21 @@ class Project:
 
     @client_id.setter
     def client_id(self, client_id):
+        client_id = int(client_id)
         if type(client_id) is int and Client.find_by_id(client_id):
             self._client_id = client_id
+        else:
+            raise ValueError(
+                "client_id must reference a client in the database")
+    @property
+    def freelancer_id(self):
+        return self._freelancer_id
+
+    @freelancer_id.setter
+    def freelancer_id(self, freelancer_id):
+        freelancer_id = int(freelancer_id)
+        if type(freelancer_id) is int and Freelancer.find_by_id(freelancer_id):
+            self._freelancer_id = freelancer_id
         else:
             raise ValueError(
                 "client_id must reference a client in the database")
@@ -110,7 +109,7 @@ class Project:
             CREATE TABLE IF NOT EXISTS projects (
             id INTEGER PRIMARY KEY,
             name TEXT,
-            job_title TEXT,
+            freelancer_id TEXT,
             client_id INTEGER,
             FOREIGN KEY (client_id) REFERENCES clients(id))
         """
@@ -131,11 +130,11 @@ class Project:
         Update object id attribute using the primary key value of new row.
         Save the object in local dictionary using table row's PK as dictionary key"""
         sql = """
-                INSERT INTO projects (name, job_title, client_id)
+                INSERT INTO projects (name, freelancer_id, client_id)
                 VALUES (?, ?, ?)
         """
 
-        CURSOR.execute(sql, (self.name, self.job_title, self.client_id))
+        CURSOR.execute(sql, (self.name, self.freelancer_id,self.client_id))
         CONN.commit()
 
         self.id = CURSOR.lastrowid
@@ -145,10 +144,10 @@ class Project:
         """Update the table row corresponding to the current Project instance."""
         sql = """
             UPDATE projects
-            SET name = ?, job_title = ?, client_id = ?
+            SET name = ?, freelancer_id = ?, client_id = ?
             WHERE id = ?
         """
-        CURSOR.execute(sql, (self.name, self.job_title,
+        CURSOR.execute(sql, (self.name, self.freelancer_id,
                              self.client_id, self.id))
         CONN.commit()
 
@@ -171,9 +170,9 @@ class Project:
         self.id = None
 
     @classmethod
-    def create(cls, name, job_title, client_id):
+    def create(cls, name, freelancer_id, client_id):
         """ Initialize a new Project instance and save the object to the database """
-        project = cls(name, job_title, client_id)
+        project = cls(name, freelancer_id, client_id)
         project.save()
         return project
 
@@ -186,7 +185,7 @@ class Project:
         if project:
             # ensure attributes match row values in case local instance was modified
             project.name = row[1]
-            project.job_title = row[2]
+            project.freelancer_id = row[2]
             project.client_id = row[3]
         else:
             # not in dictionary, create new instance and add to dictionary
@@ -209,6 +208,7 @@ class Project:
 
     @classmethod
     def find_by_id(cls, id):
+        id = int(id)
         """Return Project object corresponding to the table row matching the specified primary key"""
         sql = """
             SELECT *

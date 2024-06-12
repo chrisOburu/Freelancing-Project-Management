@@ -42,7 +42,7 @@ from helpers import (
     create_client,
     update_client,
     delete_client,
-    list_client_freelancers,
+    #list_client_freelancers,
 
 
     # FREELANCER
@@ -52,7 +52,7 @@ from helpers import (
     create_freelancer,
     update_freelancer,
     delete_freelancer,
-    list__freelancer_clients,
+    #list__freelancer_clients,
 
     # PROJECT
     list_projects,
@@ -74,8 +74,8 @@ def main():
             exit_program()
         elif table_choice == "1":
             while True:
-                clr()
-                banner()
+                # clr()
+                # banner()
                 project_menu()
                 project_choice = input("> ")
                 if project_choice == "0":
@@ -83,8 +83,8 @@ def main():
                 handle_project_choice(project_choice)
         elif table_choice == "2":
             while True:
-                clr()
-                banner()
+                # clr()
+                # banner()
                 client_menu()
                 client_choice = input("> ")
                 if client_choice == "0":
@@ -92,10 +92,12 @@ def main():
                 handle_client_choice(client_choice)
         elif table_choice == "3":
             while True:
-                clr()
-                banner()
+                # clr()
+                # banner()
                 freelancer_menu()
                 freelancer_choice = input("> ")
+                if freelancer_choice == "0":
+                    break
                 handle_freelancer_choice(freelancer_choice)
         
         else:
@@ -164,7 +166,8 @@ def handle_client_choice(choice):
     elif choice == "6":
         delete_client()
     elif choice == "7":
-        list_client_freelancers()
+        pass
+        #list_client_freelancers()
     else:
         print("Invalid choice")
 
@@ -185,7 +188,8 @@ def handle_freelancer_choice(choice):
     elif choice == "6":
         delete_freelancer()
     elif choice == "7":
-        list__freelancer_clients()
+        pass
+        #list__freelancer_clients()
     else:
         print("Invalid choice")
 

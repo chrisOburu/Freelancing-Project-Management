@@ -1,3 +1,4 @@
+
 # from models.__init__ import CURSOR, CONN
 
 
@@ -221,7 +222,7 @@ class Client:
     # Dictionary of objects saved to the database.
     all = {}
 
-    def __init__(self, client_id, username, name):
+    def __init__(self,username, name,client_id=None):
         self.client_id = client_id
         self.name = name
         self.username = username
@@ -288,7 +289,7 @@ class Client:
         CURSOR.execute(sql, (self.name, self.username))
         CONN.commit()
 
-        self.client_id = CURSOR.lastrowclient_id
+        self.client_id = CURSOR.lastrowid
         type(self).all[self.client_id] = self
 
     @classmethod
@@ -356,7 +357,7 @@ class Client:
         return [cls.instance_from_db(row) for row in rows]
 
     @classmethod
-    def find_by_client_id(cls, client_id):
+    def find_by_id(cls, client_id):
         """Return a Client object corresponding to the table row matching the specified primary key"""
         sql = """
             SELECT *
