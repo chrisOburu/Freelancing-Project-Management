@@ -1,4 +1,4 @@
-from models.__init__ import CURSOR, CONN
+from __init__ import CURSOR, CONN
 from freelancer import Freelancer
 from client import Client
 
