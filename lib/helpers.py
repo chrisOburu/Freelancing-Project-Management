@@ -3,9 +3,6 @@ from models.freelancer import Freelancer
 from models.project import Project
 
 
-def exit_program():
-    print("Goodbye!")
-    exit()
 
 # We'll implement the client functions in this lesson
 

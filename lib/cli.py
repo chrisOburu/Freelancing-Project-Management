@@ -1,4 +1,4 @@
-import pyfiglet
+from pyfiglet import figlet_format
 from colorama import init, Fore
 import random
 import os
@@ -17,11 +17,8 @@ plus = lg + '(' + w + '+' + lg + ')' + rs
 
 
 def banner():
-    f = pyfiglet.Figlet(font='doh',width=210)
-    banner = f.renderText('Freelancing Project Management')
-    #print(f'{random.choice(colors)}{banner}{n}')
+    banner = figlet_format('FPM',font="roman",width=400)
     print(f'{r}{banner}{n}')
-    print(w+'@Variable Vikings Group 1'+n+'\n')
 
 
 def clr():
@@ -30,9 +27,14 @@ def clr():
     else:
         os.system('clear')
 
+def exit_program():
+    print("Goodbye!")
+    clr()
+    exit()
+   
+
 
 from helpers import (
-    exit_program,
     # CLIENT
     list_clients,
     find_client_by_name,
@@ -64,10 +66,8 @@ from helpers import (
 
 def main():
     while True:
-        
         clr()
         banner()
-        print (os.get_terminal_size())
         table_menu()
         table_choice = input("> ")
         if table_choice == "0":
