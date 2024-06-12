@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 # from models.__init__ import CURSOR, CONN
 # from freelancer import Freelancer
 # from client import Client
+=======
+from __init__ import CURSOR, CONN
+from freelancer import Freelancer
+from client import Client
+>>>>>>> refs/remotes/origin/main
 
 # class Project:
 #     all = []
