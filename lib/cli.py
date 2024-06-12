@@ -1,3 +1,36 @@
+import pyfiglet
+from colorama import init, Fore
+import random
+import os
+
+init()
+
+lg = Fore.LIGHTGREEN_EX
+w = Fore.WHITE
+cy = Fore.CYAN
+ye = Fore.YELLOW
+rs = Fore.RESET
+r = Fore.RED
+n = Fore.RESET
+colors = [lg, r, cy, ye]
+plus = lg + '(' + w + '+' + lg + ')' + rs
+
+
+def banner():
+    f = pyfiglet.Figlet(font='doh',width=210)
+    banner = f.renderText('Freelancing Project Management')
+    #print(f'{random.choice(colors)}{banner}{n}')
+    print(f'{r}{banner}{n}')
+    print(w+'@Variable Vikings Group 1'+n+'\n')
+
+
+def clr():
+    if os.name == 'nt':
+        os.system('cls')
+    else:
+        os.system('clear')
+
+
 from helpers import (
     exit_program,
     # CLIENT
@@ -31,12 +64,18 @@ from helpers import (
 
 def main():
     while True:
+        
+        clr()
+        banner()
+        print (os.get_terminal_size())
         table_menu()
         table_choice = input("> ")
         if table_choice == "0":
             exit_program()
         elif table_choice == "1":
             while True:
+                clr()
+                banner()
                 project_menu()
                 project_choice = input("> ")
                 if project_choice == "0":
@@ -44,6 +83,8 @@ def main():
                 handle_project_choice(project_choice)
         elif table_choice == "2":
             while True:
+                clr()
+                banner()
                 client_menu()
                 client_choice = input("> ")
                 if client_choice == "0":
@@ -51,6 +92,8 @@ def main():
                 handle_client_choice(client_choice)
         elif table_choice == "3":
             while True:
+                clr()
+                banner()
                 freelancer_menu()
                 freelancer_choice = input("> ")
                 handle_freelancer_choice(freelancer_choice)
