@@ -1,5 +1,5 @@
 from models.__init__ import CURSOR, CONN
-from client import Client
+from models.client import Client
 
 class Freelancer:
     def _init_(self, freelancer_id, username, email, name):
@@ -10,17 +10,12 @@ class Freelancer:
         self.projects = []
         self.clients = []  # List of client IDs
 
-<<<<<<< HEAD
-
-
-        
-=======
     def save_to_database(self):
         """Save the freelancer to the database."""
         sql = """
         INSERT INTO freelancers (freelancer_id, username, email, name, 
         is_active, is_admin, is_blocked, is_deleted, created_at, updated_at) 
-        VALUES (?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """
         CURSOR.execute(sql, (self.freelancer_id, self.username, self.email, self.name))
         CONN.commit()
@@ -96,4 +91,3 @@ class Freelancer:
             if client:
                 clients.append(client)
         return clients
->>>>>>> 4369794 (update frelancer)
