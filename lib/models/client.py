@@ -1,13 +1,12 @@
 # lib/models/client.py
 from models.__init__ import CURSOR, CONN
 
-
 class Client:
 
     # Dictionary of objects saved to the database.
     all = {}
 
-    def __init__(self,username, name,client_id=None):
+    def __init__(self, username, name, client_id=None):
         self.client_id = client_id
         self.name = name
         self.username = username
@@ -24,9 +23,7 @@ class Client:
         if isinstance(name, str) and len(name):
             self._name = name
         else:
-            raise ValueError(
-                "Name must be a non-empty string"
-            )
+            raise ValueError("Name must be a non-empty string")
 
     @property
     def username(self):
@@ -37,13 +34,11 @@ class Client:
         if isinstance(username, str) and len(username):
             self._username = username
         else:
-            raise ValueError(
-                "Username must be a non-empty string"
-            )
+            raise ValueError("Username must be a non-empty string")
 
     @classmethod
     def create_table(cls):
-        """ Create a new table to persist the attributes of Client instances """
+        """Create a new table to persist the attributes of Client instances."""
         sql = """
             CREATE TABLE IF NOT EXISTS clients (
             client_id INTEGER PRIMARY KEY,
@@ -55,7 +50,7 @@ class Client:
 
     @classmethod
     def drop_table(cls):
-        """ Drop the table that persists Client instances """
+        """Drop the table that persists Client instances."""
         sql = """
             DROP TABLE IF EXISTS clients;
         """
@@ -63,14 +58,13 @@ class Client:
         CONN.commit()
 
     def save(self):
-        """ Insert a new row with the name and username values of the current Client instance.
+        """Insert a new row with the name and username values of the current Client instance.
         Update object client_id attribute using the primary key value of new row.
-        Save the object in local dictionary using table row's PK as dictionary key"""
+        Save the object in local dictionary using table row's PK as dictionary key."""
         sql = """
             INSERT INTO clients (name, username)
             VALUES (?, ?)
         """
-
         CURSOR.execute(sql, (self.name, self.username))
         CONN.commit()
 
@@ -79,8 +73,8 @@ class Client:
 
     @classmethod
     def create(cls, name, username):
-        """ Initialize a new Client instance and save the object to the database """
-        client = cls(name, username)
+        """Initialize a new Client instance and save the object to the database."""
+        client = cls(username, name)
         client.save()
         return client
 
@@ -96,13 +90,11 @@ class Client:
 
     def delete(self):
         """Delete the table row corresponding to the current Client instance,
-        delete the dictionary entry, and reassign client_id attribute"""
-
+        delete the dictionary entry, and reassign client_id attribute."""
         sql = """
             DELETE FROM clients
             WHERE client_id = ?
         """
-
         CURSOR.execute(sql, (self.client_id,))
         CONN.commit()
 
@@ -115,59 +107,52 @@ class Client:
     @classmethod
     def instance_from_db(cls, row):
         """Return a Client object having the attribute values from the table row."""
-
-        # Check the dictionary for an existing instance using the row's primary key
         client = cls.all.get(row[0])
         if client:
-            # ensure attributes match row values in case local instance was modified
+            # Ensure attributes match row values in case local instance was modified
             client.name = row[1]
             client.username = row[2]
         else:
-            # not in dictionary, create new instance and add to dictionary
-            client = cls(row[1], row[2])
+            # Not in dictionary, create new instance and add to dictionary
+            client = cls(row[2], row[1])  # Note: The parameters are reordered here
             client.client_id = row[0]
             cls.all[client.client_id] = client
         return client
 
     @classmethod
     def get_all(cls):
-        """Return a list containing a Client object per row in the table"""
+        """Return a list containing a Client object per row in the table."""
         sql = """
             SELECT *
             FROM clients
         """
-
         rows = CURSOR.execute(sql).fetchall()
-
         return [cls.instance_from_db(row) for row in rows]
 
     @classmethod
     def find_by_id(cls, client_id):
-        """Return a Client object corresponding to the table row matching the specified primary key"""
+        """Return a Client object corresponding to the table row matching the specified primary key."""
         sql = """
             SELECT *
             FROM clients
             WHERE client_id = ?
         """
-
         row = CURSOR.execute(sql, (client_id,)).fetchone()
         return cls.instance_from_db(row) if row else None
 
     @classmethod
     def find_by_name(cls, name):
-        """Return a Client object corresponding to first table row matching specified name"""
+        """Return a Client object corresponding to first table row matching specified name."""
         sql = """
             SELECT *
             FROM clients
-            WHERE name is ?
+            WHERE name = ?
         """
-
         row = CURSOR.execute(sql, (name,)).fetchone()
         return cls.instance_from_db(row) if row else None
 
-    #TODO check
     def projects(self):
-        """Return list of projects associated with the current client"""
+        """Return list of projects associated with the current client."""
         from models.project import Project
         sql = """
             SELECT * FROM projects
@@ -179,4 +164,3 @@ class Client:
         except Exception as e:
             print(f"Error retrieving projects: {e}")
             return []
-        #TODO check
