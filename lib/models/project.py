@@ -58,10 +58,8 @@ class Project:
         self.freelancer_id = freelancer_id
 
     def __repr__(self):
-        return (
-            f"<Project {self.id}: {self.name}, {self.freelancer_id}, " +
-            f"Client ID: {self.client_id}>"+ f"Freelancer ID: {self.freelancer_id}>"
-        )
+        return f"<Project {self.id}: {self.name}, Client ID: {self.client_id}>"+ f"Freelancer ID: {self.freelancer_id}>"
+        
 
     @property
     def name(self):

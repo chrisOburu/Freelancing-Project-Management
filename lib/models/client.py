@@ -253,7 +253,7 @@ class Client:
             self._username = username
         else:
             raise ValueError(
-                "Location must be a non-empty string"
+                "Username must be a non-empty string"
             )
 
     @classmethod
